@@ -10,13 +10,11 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
 import pandas as pd
-
+from allianceauth.services.hooks import get_extension_logger
 from django.conf import settings
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-
-from allianceauth.services.hooks import get_extension_logger
 
 from .forms import ColumnMappingForm, CSVUploadForm, MonthYearForm
 from .models import (
@@ -470,6 +468,30 @@ def alliance_charts(month, year):
         corporation_id__in=all_corps.values_list("corporation_id", flat=True),
     ).select_related("fleet_type")
 
+    fleet_types = MonthlyFleetType.objects.filter(month=month, year=year)
+    logger.info(
+        "Available Fleet Types: %s", list(fleet_types.values("id", "name", "source"))
+    )
+
+    logger.info(
+        "All Corps IDs: %s", list(all_corps.values_list("corporation_id", flat=True))
+    )
+    logger.info("Stats Query Result: %s", list(stats))
+
+    logger.info(
+        "Stats Query Corporations (Full): %s",
+        list(stats.values_list("corporation_id", flat=True)),
+    )
+    for corp_id in [1507893951, 98470069]:
+        stats_data = MonthlyCorpStats.objects.filter(corporation_id=corp_id)
+        logger.info(
+            "Stats for Corp ID %s: %s",
+            corp_id,
+            list(stats_data.values("month", "year", "total_fats")),
+        )
+
+    logger.info("Stats Query SQL: %s", str(stats.query))
+
     data_afat = {}
     for corp in corp_names:
         logger.info("Corp: %s", corp)
@@ -492,13 +514,13 @@ def alliance_charts(month, year):
     relative_data = {corp: {"AFAT": 0, "IMP": 0} for corp in corp_names}
 
     for stat in stats:
-        corp_ticker = stat.get_corporation().corporation_ticker
         logger.info(
-            "Processing: corp- %s source- %s total- %s",
-            corp_ticker,
+            "Fleet Type Data - Corp: %s, Fleet Type: %s, Source: %s",
+            stat.get_corporation().corporation_ticker,
+            stat.fleet_type.name,
             stat.fleet_type.source,
-            stat.total_fats,
         )
+        corp_ticker = stat.get_corporation().corporation_ticker
         # total_mains = CorpStats.objects.get(corp=stat.get_corporation().pk).main_count
         corp_members = AuthenticationUserprofile.objects.filter(
             main_character__corporation_id=stat.get_corporation().corporation_id
