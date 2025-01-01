@@ -751,23 +751,24 @@ def alliance_charts(month, year):
     plt.clf()
     plt.close(fig)
 
-    # Line chart for month over month AFAT data
-    afat_stats = (
-        MonthlyCorpStats.objects.filter(
-            corporation_id__in=all_corps.values_list("corporation_id", flat=True),
-            fleet_type__source="afat",
-        )
-        .values("year", "month")
-        .annotate(total=Sum("total_fats"))
-        .order_by("year", "month")
-    )
-
     start_month = (month - months_to_display) % 12 or 12
     start_year = year if month > months_to_display else year - 1
     date_range = [
         (start_year + (start_month + i - 1) // 12, (start_month + i - 1) % 12 + 1)
         for i in range(months_to_display + 1)  # Include current month
     ]
+    # Line chart for month over month AFAT data
+    afat_stats = (
+        MonthlyCorpStats.objects.filter(
+            corporation_id__in=all_corps.values_list("corporation_id", flat=True),
+            fleet_type__source="afat",
+            year__in=[start_year, year],
+            month__in=[date[1] for date in date_range],
+        )
+        .values("year", "month")
+        .annotate(total=Sum("total_fats"))
+        .order_by("year", "month")
+    )
 
     date_totals = {date: 0 for date in date_range}
     for item in afat_stats:
