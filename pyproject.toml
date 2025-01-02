@@ -1,18 +1,14 @@
 [build-system]
 build-backend = "hatchling.build"
-requires = [
-    "hatchling",
-]
+requires = ["hatchling"]
 
 [project]
 name = "lawn-stats"
 description = "lawn stats module"
 readme = "README.md"
-keywords = [
-    "allianceauth",
-]
+keywords = ["allianceauth"]
 license = { file = "LICENSE" }
-authors = [ { name = "Swashman(John Nelson)", email = "jnelson2288@gmail.com" } ]
+authors = [{ name = "Swashman(John Nelson)", email = "jnelson2288@gmail.com" }]
 requires-python = ">=3.8"
 classifiers = [
     "Environment :: Web Environment",
@@ -32,15 +28,8 @@ classifiers = [
     "Topic :: Internet :: WWW/HTTP",
     "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
 ]
-dynamic = [
-    "version",
-]
-dependencies = [
-    "allianceauth>=4,<5",
-    "matplotlib",
-    "numpy",
-    "pandas",
-]
+dynamic = ["version"]
+dependencies = ["allianceauth>=4,<5", "matplotlib", "numpy", "pandas"]
 urls.Documentation = "https://github.com/swashman/lawn-stats#readme"
 urls.Homepage = "https://github.com/swashman/lawn-stats"
 urls.Issues = "https://github.com/swashman/lawn-stats/issues"
@@ -49,4 +38,24 @@ urls.Issues = "https://github.com/swashman/lawn-stats/issues"
 path = "lawn_stats/__init__.py"
 
 [tool.hatch.build]
-include = [ "/lawn_stats" ]
+include = ["/lawn_stats"]
+
+[tool.pylint.'MASTER']
+ignore-patterns = ["__init__.py", "auth_hooks.py", "apps.py", "admin.py"]
+ignore-paths = ["^.*/tests/.*$", "^.*/migrations/.*$"]
+
+[tool.pylint.'BASIC']
+good-names = ["i", "j", "k", "ex"]
+
+[tool.pylint.'FORMAT']
+max-line-length = 120
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = [
+    "cyclic-import",
+    "fixme",
+    "import-outside-toplevel",
+    "imported-auth-user",
+    "too-few-public-methods",
+    "no-name-in-module",
+]
