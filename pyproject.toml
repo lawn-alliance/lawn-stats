@@ -1,6 +1,7 @@
 [build-system]
-build-backend = "hatchling.build"
-requires = ["hatchling"]
+build-backend = "flit_core.buildapi"
+
+requires = ["flit-core>=3.2,<4"]
 
 [project]
 name = "lawn-stats"
@@ -30,19 +31,33 @@ classifiers = [
 ]
 dynamic = ["version"]
 dependencies = ["allianceauth>=4,<5", "matplotlib", "numpy", "pandas"]
-urls.Documentation = "https://github.com/swashman/lawn-stats#readme"
-urls.Homepage = "https://github.com/swashman/lawn-stats"
-urls.Issues = "https://github.com/swashman/lawn-stats/issues"
 
-[tool.hatch.version]
-path = "lawn_stats/__init__.py"
+[project.urls]
+Homepage = "https://gitlab.com/lawn-alliance/lawn-stats"
+Documentation = "https://gitlab.com/lawn-alliance/lawn-stats/-/blob/master/README.md"
 
-[tool.hatch.build]
-include = ["/lawn_stats"]
+[tool.flit.module]
+name = "lawn_stats"
 
+known_allianceauth = ["allianceauth", "app_utils"]
+known_django = ["django", "django_webtest", "esi", "eveuniverse"]
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+sections = [
+    "FUTURE",
+    "STDLIB",
+    "THIRDPARTY",
+    "DJANGO",
+    "ALLIANCEAUTH",
+    "FIRSTPARTY",
+    "LOCALFOLDER",
+]
 [tool.pylint.'MASTER']
 ignore-patterns = ["__init__.py", "auth_hooks.py", "apps.py", "admin.py"]
 ignore-paths = ["^.*/tests/.*$", "^.*/migrations/.*$"]
+fail-under = 8.0
 
 [tool.pylint.'BASIC']
 good-names = ["i", "j", "k", "ex"]
