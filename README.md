@@ -1,4 +1,4 @@
-# LAWN STATS App<a name="lawn-stats-app"></a>
+# LAWN STATS App
 
 Description of app
 
@@ -6,8 +6,6 @@ Description of app
 ![python](https://img.shields.io/badge/python-3.8-informational)
 ![django](https://img.shields.io/badge/django-3.2-informational)
 ![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)
-
-_(These badges are examples, you can and should replace them with your own)_
 
 ______________________________________________________________________
 
@@ -20,7 +18,7 @@ ______________________________________________________________________
 
 <!-- mdformat-toc end -->
 
-## Installing into production AA<a name="installing-into-production-aa"></a>
+## Installing into production AA
 
 To install your plugin into a production AA run this command within the virtual Python environment of your AA installation:
 
@@ -39,13 +37,13 @@ SOME_SETTING = "setting"
 - run migrations
 - restart your allianceserver.
 
-## Optional Settings<a name="optional-settings"></a>
+## Optional Settings
 
 | Setting            | Default | Description                          |
 | :----------------- | :------ | :----------------------------------- |
 | `OPTIONAL_SETTING` | `True`  | some optional setting does something |
 
-## Permissions<a name="permissions"></a>
+## Permissions
 
 | ID             | Description           | Notes                   |
 | :------------- | :-------------------- | :---------------------- |
