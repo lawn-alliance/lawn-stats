@@ -3,12 +3,11 @@ App Models
 Create your models in here
 """
 
+from allianceauth.services.hooks import ServicesHook, get_extension_logger
 from django.core.exceptions import ObjectDoesNotExist
 
 # Django
 from django.db import models
-
-from allianceauth.services.hooks import ServicesHook, get_extension_logger
 
 logger = get_extension_logger(__name__)
 SERVICE_DB = {
@@ -172,6 +171,15 @@ class AfatFatlink(models.Model):
         null=True,
         related_name="+",
     )
+    fleet_type = models.CharField(
+        blank=True,
+        default="",
+        max_length=254,
+        help_text="The FAT link fleet type, if it's set",
+    )
+    doctrine = models.CharField(
+        blank=True, default="", max_length=254, help_text="The FAT link doctrine"
+    )
     is_esilink = models.IntegerField()
     esi_fleet_id = models.BigIntegerField(blank=True, null=True)
     is_registered_on_esi = models.IntegerField()
@@ -194,6 +202,7 @@ class AfatFatlink(models.Model):
 
 
 class AfatFleettype(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=254)
     is_enabled = models.IntegerField()
 

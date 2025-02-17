@@ -3,12 +3,10 @@
 import csv
 from datetime import datetime
 
+from allianceauth.services.hooks import get_extension_logger
 from celery import shared_task
-
 from django.conf import settings
 from django.db import IntegrityError, transaction
-
-from allianceauth.services.hooks import get_extension_logger
 
 from .models import (
     AfatFat,
@@ -210,14 +208,28 @@ def process_afat_data_task(month, year):
             continue
 
         fatlink = afat_fat.fatlink
-        fleet_type_name = fatlink.link_type.name if fatlink.link_type else "Unknown"
 
-        fleet_type = MonthlyFleetType.objects.get(
-            name=fleet_type_name,
-            source="afat",
-            month=month,
-            year=year,
-        )
+        if fatlink and fatlink.link_type:
+            fleet_type_name = fatlink.link_type.name
+        else:
+            fleet_type_name = "Unknown"
+            logger.warning(
+                f"Fleet type is Unknown for afat_fat: {afat_fat}. Fatlink: {fatlink}. "
+                f"Link Type: {getattr(fatlink, 'link_type', None)}"
+            )
+
+        try:
+            fleet_type = MonthlyFleetType.objects.get(
+                name=fleet_type_name,
+                source="afat",
+                month=month,
+                year=year,
+            )
+        except MonthlyFleetType.DoesNotExist:
+            logger.error(
+                f"MonthlyFleetType not found for name={fleet_type_name}, source=afat, month={month}, year={year}"
+            )
+            fleet_type = None
 
         try:
             with transaction.atomic():
