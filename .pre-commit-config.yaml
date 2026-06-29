@@ -6,12 +6,12 @@
 repos:
   # Code Upgrades
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.0
+    rev: v3.21.2
     hooks:
       - id: pyupgrade
         args: [--py38-plus]
   - repo: https://github.com/adamchainz/django-upgrade
-    rev: 1.29.1
+    rev: 1.31.1
     hooks:
       - id: django-upgrade
         args: [--target-version=4.2]
@@ -63,7 +63,7 @@ repos:
             swagger\.json
           )
   - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
-    rev: 3.4.0
+    rev: 3.6.1
     hooks:
       - id: editorconfig-checker
         exclude: |
@@ -75,7 +75,7 @@ repos:
             swagger\.json
           )
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.45.0
+    rev: v0.49.0
     hooks:
       - id: markdownlint
         exclude: |
@@ -87,7 +87,7 @@ repos:
           - --disable=MD013
   # Infrastructure
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: v2.11.0
+    rev: v2.25.1
     hooks:
       - id: pyproject-fmt
         name: pyproject.toml formatter
@@ -97,7 +97,7 @@ repos:
         additional_dependencies:
           - tox==4.15.0 # https://github.com/tox-dev/tox/releases/latest
   - repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.24.1
+    rev: v0.25
     hooks:
       - id: validate-pyproject
         name: Validate pyproject.toml
